@@ -572,6 +572,11 @@ foreach dir : bdb_dirs
     endif
 endforeach
 
+libdb = declare_dependency(
+    include_directories : include_directories('/nix/store/577gqzz58l65ra0fmbrq1k1wc8fnn5x7-db-5.3.28-dev/include/'),
+    link_args : ['-L/nix/store/9ga2fkz4whkrnw0l7afpb1rsmbjxsk41-db-5.3.28/lib/', '-ldb']
+)
+have_bdb = true
 if not have_bdb
     if bdb_req_version != ''
         msg = 'Berkeley DB library version ' + bdb_req_version + ' requested via -Dwith-bdb-version= not found!'
@@ -580,6 +585,12 @@ if not have_bdb
     endif
     error(msg, 'Please specify an installation path using the -Dwith-bdb-path= configure option (must include lib and include dirs)')
 endif
+
+#TODO: temp comment out because of the way nix handles include/ and lib dirs
+#bdb_lib = declare_dependency(
+#    link_args: ['-L' + , '-l' + lib_name],
+#    include_directories: inc_dir
+#)
 
 #
 # Check for Perl
